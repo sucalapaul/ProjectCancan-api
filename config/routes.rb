@@ -1,4 +1,8 @@
 ProjectCancanApi::Application.routes.draw do
+  resources :cercs, except: :edit
+
+  get "cerc/name"
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
