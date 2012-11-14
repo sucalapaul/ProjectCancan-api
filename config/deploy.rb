@@ -27,6 +27,7 @@
 # -----------------------------------------------------------------------------------------------------------
 require "bundler/capistrano"
 
+
 server "168.63.60.119", :web, :app, :db, primary: true
 
 set :application, "ProjectCancan-api"
@@ -38,6 +39,10 @@ set :use_sudo, false
 set :scm, "git"
 set :repository, "git@github.com:sucalapaul/#{application}.git"
 set :branch, "master"
+
+set :default_environment, {
+  'PATH' => "/home/seedbit/.rvm/gems/ruby-1.9.3-p194@global/bin/:$PATH"
+}
 
 default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
@@ -61,9 +66,9 @@ namespace :deploy do
   task :setup_config, roles: :app do
     # sudo "ln -nfs #{current_path}/config/nginx.conf /etc/nginx/sites-enabled/#{application}"
     # sudo "ln -nfs #{current_path}/config/unicorn_init.sh /etc/init.d/unicorn_#{application}"
-    # run "mkdir -p #{shared_path}/config"
-    # put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
-    # puts "Now edit the config files in #{shared_path}."
+    run "mkdir -p #{shared_path}/config"
+    put File.read("config/database.example.yml"), "#{shared_path}/config/database.yml"
+    puts "Now edit the config files in #{shared_path}."
   end
   after "deploy:setup", "deploy:setup_config"
 
